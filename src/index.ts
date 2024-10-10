@@ -83,8 +83,8 @@ app.post('/createWallet', async (req: Request, res: Response) => {
     const { publicKey, secretKey } = await createWallet();
     res.status(200).send({ publicKey, secretKey });
   } catch (error) {
-    console.error('Cüzdan oluşturulurken bir hata oluştu:', error);
-    res.status(500).send({ message: 'Cüzdan oluşturulurken bir hata oluştu' });
+    console.error('An error occurred while creating the wallet:', error);
+    res.status(500).send({ message: 'An error occurred while creating the wallet:' });
   }
 });
 
@@ -92,10 +92,10 @@ app.post('/fundWallet', async (req: Request, res: Response) => {
   try {
     const { publicKey } = req.body;
     await fundWallet(publicKey);
-    res.status(200).send({ message: 'Cüzdan fonlandı' });
+    res.status(200).send({ message: 'Wallet funded.' });
   } catch (error) {
-    console.error('Cüzdan fonlanırken bir hata oluştu:', error);
-    res.status(500).send({ message: 'Cüzdan fonlanırken bir hata oluştu' });
+    console.error('An error occurred while funding the wallet:', error);
+    res.status(500).send({ message: 'An error occurred while funding the wallet.' });
   }
 });
 
@@ -103,10 +103,10 @@ app.get('/getBalance', async (req: Request, res: Response) => {
   try {
     const { publicKey } = req.body;
     const balance = await getWalletBalance(publicKey);
-    res.status(200).send({ message: 'Bakiyeniz kontrol edildi.', balance: balance });
+    res.status(200).send({ message: 'Your balance has been checked.', balance: balance });
   } catch (error) {
-    console.error('Bakiyeyi kontrol ederken bir hata oluştu:', error);
-    res.status(500).send({ message: 'Bakiyeyi kontrol ederken bir hata oluştu' });
+    console.error('An error occurred while checking the balance:', error);
+    res.status(500).send({ message: 'An error occurred while checking the balance' });
   }
 });
 
