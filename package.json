@@ -1,0 +1,29 @@
+{
+  "name": "stellar-payment-messaging",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc && node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^22.7.4",
+    "@types/node-fetch": "^2.6.11",
+    "@types/urijs": "^1.19.25",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "node-fetch": "^3.3.2",
+    "soroban-client": "^1.0.1"
+  }
+}
