@@ -77,3 +77,6 @@
   - **Response Body**:
     ```json
     {
+      "message": "An error occurred while checking the balance"
+    }
+    ```
