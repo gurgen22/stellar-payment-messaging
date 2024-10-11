@@ -1,32 +1,12 @@
 import express, { Request, Response } from 'express';
 import { Keypair, Server, Networks, TransactionBuilder, Operation, Asset, Memo, Account } from 'soroban-client';
 import fetch from 'node-fetch';
-import { send } from 'process';
+import { IAccountData } from './interface/IAccountData';
+import { ITransactionRecord } from './interface/ITransactionRecord';
+import { IRecipient } from './interface/IRecipient';
 
 const server = new Server('https://horizon-testnet.stellar.org');
 const networkPassphrase = Networks.TESTNET;
-
-interface Balance {
-  balance: string;
-  buying_liabilities: string;
-  selling_liabilities: string;
-  asset_type: string;
-}
-
-interface AccountData {
-  id: string;
-  account_id: string;
-  sequence: string;
-  balances: Balance[];
-}
-
-interface TransactionRecord {
-  id: string;
-  paging_token: string;
-  created_at: string;
-  source_account: string;
-}
-
 
 async function createWallet(): Promise<{ publicKey: string, secretKey: string }> {
   const keypair = Keypair.random();
@@ -60,7 +40,7 @@ async function getWalletBalance(publicKey: string): Promise<any> {
       throw new Error('Account information could not be retrieved.');
     }
 
-    const accountData: AccountData = await response.json() as AccountData;
+    const accountData: IAccountData = await response.json() as IAccountData;
     const balanceInfo = accountData.balances.find((b: { asset_type: string }) => b.asset_type === 'native');
     if (balanceInfo) {
       console.log(`XLM Balance: ${balanceInfo.balance}`);
@@ -191,24 +171,19 @@ async function sendXLMToMultipleRecipients(
   }
 }
 
-async function getTransactionHistory(publicKey: string): Promise<TransactionRecord[]> {
+async function getTransactionHistory(publicKey: string): Promise<ITransactionRecord[]> {
   try {
     const response = await fetch(`https://horizon-testnet.stellar.org/accounts/${publicKey}/transactions`);
     if (!response.ok) {
       throw new Error('Transaction history could not be retrieved.');
     }
-    const transactionData = await response.json() as { _embedded: { records: TransactionRecord[] } };
+    const transactionData = await response.json() as { _embedded: { records: ITransactionRecord[] } };
     return transactionData._embedded.records;
   } catch (error) {
     console.error('An error occurred while retrieving transaction history:', error);
     return [];
   }
 }
-
-
-
-
-
 
 const app = express();
 const port = 3000;
@@ -265,15 +240,10 @@ app.post('/sendXLM', async (req: Request, res: Response) => {
     res.status(500).send({ message: 'Transfer failed', error });
   }
 });
-interface Recipient {
-  recipientPublicKey: string;
-  amount: string;
-  message?: string;
-}
 
 app.post('/sendXLMToMultipleRecipients', async (req: Request, res: Response) => {
   try {
-    const { senderSecretKey, recipients }: { senderSecretKey: string; recipients: Recipient[] } = req.body;
+    const { senderSecretKey, recipients }: { senderSecretKey: string; recipients: IRecipient[] } = req.body;
     const response = await sendXLMToMultipleRecipients(senderSecretKey, recipients);
 
     res.status(200).send({ message: 'Transfers successful', response });
@@ -281,7 +251,6 @@ app.post('/sendXLMToMultipleRecipients', async (req: Request, res: Response) => 
     res.status(500).send({ message: 'Error sendXLMToMultipleRecipients:', error });
   }
 });
-
 
 app.get('/transactionHistory', async (req: Request, res: Response) => {
   try {
