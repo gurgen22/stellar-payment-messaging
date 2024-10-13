@@ -189,21 +189,21 @@ To get started with the project, follow these steps:
 - **Description**: The /sendXLMToMultipleRecipients API endpoint allows users to transfer XLM (Lumens) to multiple recipients in a single transaction. Users must provide their sender secret key and an array of recipient details, including public keys and amounts. The endpoint responds with a success message upon completion.
 - **Request Body**:
     ```json
-    {
-      "senderSecretKey": "your_sender_secret_key",
-      "recipients": [
-    {
-      "recipientPublicKey": "recipient_public_key_1",
-      "amount": "value_in_xlm_1",
-      "message": "message_for_recipient_1"
-    },
-    {
-      "recipientPublicKey": "recipient_public_key_2",
-      "amount": "value_in_xlm_2",
-      "message": "message_for_recipient_2"
-    }
-  ]
-    }
+  { 
+    "senderSecretKey":"your_sender_secret_key",
+    "recipients":[
+       {
+          "recipientPublicKey":"recipient_public_key_1",
+          "amount":"value_in_xlm_1",
+          "message":"message_for_recipient_1"
+       },
+       {
+          "recipientPublicKey":"recipient_public_key_2",
+          "amount":"value_in_xlm_2",
+          "message":"message_for_recipient_2"
+       }
+    ]
+  }
     ```
 - **Response**:
   - **Status Code**: 200 OK
